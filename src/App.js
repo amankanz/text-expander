@@ -4,7 +4,7 @@ import "./styles.css";
 export default function App() {
   return (
     <div>
-      <TextExpander collapsedNumWords={200}>
+      <TextExpander collapsedNumWords={15}>
         Space travel is the ultimate adventure! Imagine soaring past the stars
         and exploring new worlds. It's the stuff of dreams and science fiction,
         but believe it or not, space travel is a real thing. Humans and robots
@@ -37,35 +37,37 @@ export default function App() {
 
 function TextExpander({
   children,
-  collapsedNumWords = 100,
+  collapsedNumWords = 10,
   expandButtonText = "Show more",
   collapseButtonText = "Show less",
   buttonColor = "blue",
   expanded = false,
   className = "",
 }) {
-  const [expand, setExpand] = useState(expanded);
+  const [isExpand, setIsExpand] = useState(expanded);
 
   const buttonStyles = {
     color: buttonColor,
     cursor: "pointer",
   };
 
-  const result =
-    collapsedNumWords > 0
-      ? `${children.substr(0, collapsedNumWords)}...`
-      : children.substr(0);
+  // const resultText = isExpand
+  //   ? children
+  //   : `${children.substr(0, collapsedNumWords)}...`;
+  const resultText = isExpand
+    ? children
+    : `${children.split(" ").slice(0, collapsedNumWords).join(" ")}...`;
 
   function handleExpandedText() {
-    setExpand((expand) => !expand);
+    setIsExpand((expand) => !expand);
   }
 
   return (
-    <div>
-      {!expand ? result : children}
-      <span role="button" style={buttonStyles} onClick={handleExpandedText}>
-        {expand ? collapseButtonText : expandButtonText}
-      </span>
+    <div className={className}>
+      <span>{resultText}</span>
+      <button style={buttonStyles} onClick={handleExpandedText}>
+        {isExpand ? collapseButtonText : expandButtonText}
+      </button>
     </div>
   );
 }
